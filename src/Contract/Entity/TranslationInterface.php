@@ -8,9 +8,9 @@ interface TranslationInterface
 {
     public static function getTranslatableEntityClass(): string;
 
-    public function setTranslatable(TranslatableInterface $translatable): void;
+    public function setTranslatable(\Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface $translatable): void;
 
-    public function getTranslatable(): TranslatableInterface;
+    public function getTranslatable(): \Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 
     public function setLocale(string $locale): void;
 
