@@ -6,13 +6,12 @@ namespace Knp\DoctrineBehaviors\Model\Translatable;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface;
 use Knp\DoctrineBehaviors\Exception\TranslatableException;
 
 trait TranslatableMethodsTrait
 {
     /**
-     * @return Collection|TranslationInterface[]
+     * @return Collection|\Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface[]
      */
     public function getTranslations()
     {
@@ -25,8 +24,8 @@ trait TranslatableMethodsTrait
     }
 
     /**
-     * @param Collection|TranslationInterface[] $translations
-     * @phpstan-param iterable<TranslationInterface> $translations
+     * @param Collection|\Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface[] $translations
+     * @phpstan-param iterable<\Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface> $translations
      */
     public function setTranslations(iterable $translations): void
     {
@@ -38,7 +37,7 @@ trait TranslatableMethodsTrait
     }
 
     /**
-     * @return Collection|TranslationInterface[]
+     * @return Collection|\Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface[]
      */
     public function getNewTranslations()
     {
@@ -50,14 +49,14 @@ trait TranslatableMethodsTrait
         return $this->newTranslations;
     }
 
-    public function addTranslation(TranslationInterface $translation): void
+    public function addTranslation(\Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface $translation): void
     {
         $this->getTranslations()
             ->set((string) $translation->getLocale(), $translation);
         $translation->setTranslatable($this);
     }
 
-    public function removeTranslation(TranslationInterface $translation): void
+    public function removeTranslation(\Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface $translation): void
     {
         $this->getTranslations()
             ->removeElement($translation);
@@ -70,7 +69,7 @@ trait TranslatableMethodsTrait
      *
      * @param string $locale The locale (en, ru, fr) | null If null, will try with current locale
      */
-    public function translate(?string $locale = null, bool $fallbackToDefault = true): TranslationInterface
+    public function translate(?string $locale = null, bool $fallbackToDefault = true): \Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface
     {
         return $this->doTranslate($locale, $fallbackToDefault);
     }
@@ -132,7 +131,7 @@ trait TranslatableMethodsTrait
      *
      * @param string $locale The locale (en, ru, fr) | null If null, will try with current locale
      */
-    protected function doTranslate(?string $locale = null, bool $fallbackToDefault = true): TranslationInterface
+    protected function doTranslate(?string $locale = null, bool $fallbackToDefault = true): \Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface
     {
         if ($locale === null) {
             $locale = $this->getCurrentLocale();
@@ -156,7 +155,7 @@ trait TranslatableMethodsTrait
 
         $class = static::getTranslationEntityClass();
 
-        /** @var TranslationInterface $translation */
+        /** @var \Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface $translation */
         $translation = new $class();
         $translation->setLocale($locale);
 
@@ -187,7 +186,7 @@ trait TranslatableMethodsTrait
     /**
      * Finds specific translation in collection by its locale.
      */
-    protected function findTranslationByLocale(string $locale, bool $withNewTranslations = true): ?TranslationInterface
+    protected function findTranslationByLocale(string $locale, bool $withNewTranslations = true): ?\Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface
     {
         $translation = $this->getTranslations()
             ->get($locale);
@@ -227,7 +226,7 @@ trait TranslatableMethodsTrait
         );
     }
 
-    private function resolveFallbackTranslation(?string $locale): ?TranslationInterface
+    private function resolveFallbackTranslation(?string $locale): ?\Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface
     {
         $fallbackLocale = $this->computeFallbackLocale($locale);
 
